@@ -1,0 +1,56 @@
+// src/App.tsx
+import { useState } from 'react';
+import css from '../styles/App.module.css';
+import type { Votes, VoteType } from './Votes';
+
+import CafeInfo from './CafeInfo';
+import VoteOptions from './VoteOptions';
+import VoteStats from './VoteStats';
+import Notification from './Notification';
+
+export default function App() {
+  // Крок 3: Стан додатка
+  const [votes, setVotes] = useState<Votes>({
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  });
+
+  // Функції для роботи зі станом
+  const handleVote = (type: VoteType): void => {
+    setVotes((prevState) => ({
+      ...prevState,
+      [type]: prevState[type] + 1,
+    }));
+  };
+
+  const resetVotes = (): void => {
+    setVotes({ good: 0, neutral: 0, bad: 0 });
+  };
+
+  // Крок 6: Обчислення статистики
+  const totalVotes = votes.good + votes.neutral + votes.bad;
+  const positiveRate = totalVotes ? Math.round((votes.good / totalVotes) * 100) : 0;
+
+  return (
+    <div className={css.app}>
+      <CafeInfo />
+      
+      <VoteOptions 
+        onVote={handleVote} 
+        onReset={resetVotes} 
+        canReset={totalVotes > 0} 
+      />
+
+      {totalVotes > 0 ? (
+        <VoteStats 
+          votes={votes} 
+          totalVotes={totalVotes} 
+          positiveRate={positiveRate} 
+        />
+      ) : (
+        <Notification />
+      )}
+    </div>
+  );
+}
