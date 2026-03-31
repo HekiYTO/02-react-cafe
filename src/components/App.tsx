@@ -9,14 +9,12 @@ import VoteStats from './VoteStats';
 import Notification from './Notification';
 
 export default function App() {
-  // Крок 3: Стан додатка
   const [votes, setVotes] = useState<Votes>({
     good: 0,
     neutral: 0,
     bad: 0,
   });
 
-  // Функції для роботи зі станом
   const handleVote = (type: VoteType): void => {
     setVotes((prevState) => ({
       ...prevState,
@@ -28,7 +26,6 @@ export default function App() {
     setVotes({ good: 0, neutral: 0, bad: 0 });
   };
 
-  // Крок 6: Обчислення статистики
   const totalVotes = votes.good + votes.neutral + votes.bad;
   const positiveRate = totalVotes ? Math.round((votes.good / totalVotes) * 100) : 0;
 
